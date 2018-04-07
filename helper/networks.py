@@ -27,13 +27,13 @@ def inception_res(input_shape=(224,224,3)):
     return inception_resnet_v2.InceptionResNetV2(input_shape=input_shape, include_top=False)
 
 def top_model(input_shape, verbose=False):
-	top_model = Sequential()
-	top_model.add(Flatten(input_shape=input_shape))
-	top_model.add(Dense(256, activation='relu'))
+    top_model = Sequential()
+    top_model.add(Flatten(input_shape=input_shape))
+    top_model.add(Dense(256, activation='relu'))
     top_model.add(Dense(50, activation='relu'))
-	top_model.add(Dense(1, activation='sigmoid'))
-	if verbose: top_model.summary()
-	return top_model
+    top_model.add(Dense(1, activation='sigmoid'))
+    if verbose: top_model.summary()
+    return top_model
 
 def all_nets():
     return {'simple_cnn':simple_cnn, 'vggnet':vggnet,
