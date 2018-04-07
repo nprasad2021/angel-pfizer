@@ -3,3 +3,4 @@
 *.jpg
 *.DS*
 *.DS
+!*.ipynb
