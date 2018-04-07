@@ -15,16 +15,16 @@ def simple_cnn(input_shape=(224,224,3)):
     return model
 
 def vggnet(input_shape=(224,224,3)):
-    return vgg16.VGG16(input_shape=input_shape, include_top=False)
+    return vgg16.VGG16(input_shape=input_shape, include_top=False, weights=None)
 
 def resnet(input_shape=(224,224,3)):
-    return resnet50.ResNet50(input_shape=input_shape, include_top=False)
+    return resnet50.ResNet50(input_shape=input_shape, include_top=False, weights=None)
 
 def inceptionv3(input_shape=(224,224,3)):
-    return inception_v3.InceptionV3(input_shape=input_shape, include_top=False)
+    return inception_v3.InceptionV3(input_shape=input_shape, include_top=False, weights=None)
 
 def inception_res(input_shape=(224,224,3)):
-    return inception_resnet_v2.InceptionResNetV2(input_shape=input_shape, include_top=False)
+    return inception_resnet_v2.InceptionResNetV2(input_shape=input_shape, include_top=False, weights=None)
 
 def top_model(input_shape, verbose=False):
     top_model = Sequential()

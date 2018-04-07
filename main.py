@@ -29,8 +29,9 @@ for m in archs:
 	print(os.getcwd())
 	training_generator, validation_generator = data_processing.get_gen(dataset)
 
-	filepath = 'models/' + m
-	tensorboard = TensorBoard(log_dir="logs/" + m)
+	filepath = 'models/' + m + "/"
+
+	tensorboard = TensorBoard(log_dir="logs/" + m + '/')
 
 	best_model_checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 	callbacks_list = [best_model_checkpoint]
