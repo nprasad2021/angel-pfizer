@@ -1,3 +1,5 @@
 *.wav
 *.png
 *.jpg
+*.DS*
+*.DS
