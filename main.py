@@ -53,7 +53,7 @@ for m in archs:
     	epochs=epochs,
     	validation_data=validation_generator,
     	validation_steps=nb_validation_samples/batch_size,
-    	callbacks_list = [best_model_checkpoint],
+    	callbacks = callbacks_list,
     	verbose=2)
 
 
