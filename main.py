@@ -30,6 +30,8 @@ for m in archs:
 	training_generator, validation_generator = data_processing.get_gen(dataset)
 
 	filepath = 'models/' + m + "/"
+	if not os.path.exists(filepath):
+		os.makedirs(filepath)
 
 	tensorboard = TensorBoard(log_dir="logs/" + m + '/')
 
@@ -51,7 +53,7 @@ for m in archs:
     	epochs=epochs,
     	validation_data=validation_generator,
     	validation_steps=nb_validation_samples/batch_size,
-    	callbacks=callbacks_list,
+    	callbacks_list = [best_model_checkpoint]
     	verbose=2)
 
 
