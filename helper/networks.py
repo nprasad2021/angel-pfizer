@@ -27,15 +27,44 @@ def inception_res(input_shape=(224,224,3)):
     return inception_resnet_v2.InceptionResNetV2(input_shape=input_shape, include_top=False, weights=None)
 
 def top_model(input_shape, verbose=False):
-    top_model = Sequential()
-    top_model.add(Flatten(input_shape=input_shape))
-    top_model.add(Dense(256, activation='relu'))
-    top_model.add(Dense(50, activation='relu'))
-    top_model.add(Dense(1, activation='sigmoid'))
-    if verbose: top_model.summary()
-    return top_model
+    
+    model.add(Flatten(input_shape=input_shape))
+    model.add(Dense(128))
+    model.add(Activation('relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(1))
+    model.add(Activation("sigmoid"))
+    return model
+
+def audio_model(input_shape=(224,224,3))
+
+    nb_filters = 32  # number of convolutional filters to use
+    pool_size = (2, 2)  # size of pooling area for max pooling
+    kernel_size = (3, 3)  # convolution kernel size
+    nb_layers = 4
+
+    model = Sequential()
+    model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1],
+                        border_mode='valid', input_shape=input_shape))
+    model.add(BatchNormalization(axis=-1))
+    model.add(Activation('relu'))
+
+    for layer in range(nb_layers-1):
+        model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
+        model.add(BatchNormalization(axis=-1))
+        model.add(ELU(alpha=1.0))  
+        model.add(MaxPooling2D(pool_size=pool_size))
+        model.add(Dropout(0.25))
+
+    model.add(Flatten())
+    model.add(Dense(128))
+    model.add(Activation('relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(1))
+    model.add(Activation("sigmoid"))
+    return model
 
 def all_nets():
     return {'simple_cnn':simple_cnn, 'vggnet':vggnet,
            'resnet':resnet, 'inceptionv3':inceptionv3,
-           'inception_res':inception_res}
+           'inception_res':inception_res, 'audio_model':audio_model}
