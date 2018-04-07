@@ -4,3 +4,4 @@
 *.DS*
 *.DS
 !*.ipynb
+data/*
