@@ -7,55 +7,53 @@ from scipy.misc import imread, imresize
 from keras.callbacks import EarlyStopping
 from glob import glob
 import pickle as pkl
+import joblib
 
 from keras.preprocessing.image import ImageDataGenerator
 
-train_data_path = "./data/spectrograms/train"
-val_data_path = "./data/spectrograms/validation"
+train_data_path = "./data/melspectrograms/train"
+val_data_path = "./data/melspectrograms/validation"
 
-BATCH_SIZE = 64
+BATCH_SIZE = 4
 NUM_EPOCH = 50
 
 
-imsize = (240, 320, 3)
+imsize = (480, 640, 1)
 
-if not os.path.exists("../data/pickled.pkl"):
-    
+#if not os.path.exists("./data/melspectrograms/pickled.pkl"):
+
+def pull_data(path):
+
     train = []
     train_classes = []
     for img_class in ["sick", "not_sick"]:
-        train_files = glob(f"{train_data_path}/{img_class}/*.png")
+        train_files = glob(f"{path}/{img_class}/*.png")
         for f in train_files:
-            img = imread(f)[:, :, :3]
-            img = imresize(img, 0.5)
+            img = imread(f, 'L')
+            img = img.astype(np.float32)
             train.append(img)
             if img_class == "sick":
                 train_classes.append(1)
             else:
                 train_classes.append(0)
 
-    X_train = np.array(train, dtype = np.int32)
+    X_train = np.array(train, dtype = np.float32)
+    X_train = X_train[:, :, :, np.newaxis]
+
     y_train = np.array(train_classes, dtype = np.bool)
 
-    val = []
-    val_classes = []
-    for img_class in ["sick", "not_sick"]:
-        val_files = glob(f"{val_data_path}/{img_class}/*.png")
-        for f in val_files:
-            img = imread(f)[:, :, :3]
-            img = imresize(img, 0.5)
-            val.append(img)
-            if img_class == "sick":
-                val_classes.append(1)
-            else:
-                val_classes.append(0)
+    return X_train, y_train
 
-    X_val = np.array(val, dtype = np.int32)
-    y_val = np.array(val_classes, dtype = np.bool)
+X_train, y_train = pull_data(train_data_path)
+X_train /= 255
 
-    pkl.dump([X_train, y_train, X_val, y_val], open("./data/pickled.pkl", "wb"))
-else:
-    X_train, y_train, X_val, y_val = pkl.load(open("./data/pickled.pkl", "rb"))
+X_val, y_val = pull_data(val_data_path)
+X_val /= 255
+
+data_mean = np.mean(X_train)
+X_train -= data_mean
+X_val -= data_mean
+
 
 es = EarlyStopping(min_delta=0.1, patience = 15)
 
@@ -64,8 +62,7 @@ x = Conv2D(32, (3, 3), activation = "linear")(input)
 x = BatchNormalization()(x)
 x = Activation('relu')(x)
 x = MaxPool2D(3,3)(x)
-x = Conv2D(32, (3, 3), activation = "linear")(input)
-x = BatchNormalization()(x)
+x = Conv2D(32, (3, 3), activation = "linear")(x)
 x = Activation('relu')(x)
 x = MaxPool2D(3,3)(x)
 x = Flatten()(x)
@@ -75,6 +72,10 @@ predictions = Dense(1, activation = 'sigmoid')(x)
 model = Model(inputs = input, outputs = predictions)
 model.summary()
 model.compile(optimizer = "adam", loss = "binary_crossentropy", metrics = ["accuracy"])
-model.fit(X_train, y_train, validation_data = (X_val, y_val), epochs = NUM_EPOCH, callbacks = [es])
+model.fit(X_train, y_train, 
+            batch_size = BATCH_SIZE,
+            validation_data = (X_val, y_val), 
+            epochs = NUM_EPOCH, 
+            callbacks = [es])
 
 
