@@ -27,7 +27,7 @@ def inception_res(input_shape=(224,224,3)):
     return inception_resnet_v2.InceptionResNetV2(input_shape=input_shape, include_top=False, weights=None)
 
 def top_model(input_shape, verbose=False):
-    
+
     model.add(Flatten(input_shape=input_shape))
     model.add(Dense(128))
     model.add(Activation('relu'))
@@ -36,7 +36,7 @@ def top_model(input_shape, verbose=False):
     model.add(Activation("sigmoid"))
     return model
 
-def audio_model(input_shape=(224,224,3))
+def audio_model(input_shape=(224,224,3)):
 
     nb_filters = 32  # number of convolutional filters to use
     pool_size = (2, 2)  # size of pooling area for max pooling
