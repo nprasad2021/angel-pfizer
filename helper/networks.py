@@ -30,7 +30,8 @@ def top_model(input_shape, verbose=False):
 	top_model = Sequential()
 	top_model.add(Flatten(input_shape=input_shape))
 	top_model.add(Dense(256, activation='relu'))
-	top_model.add(Dense(2, activation='sigmoid'))
+    top_model.add(Dense(50, activation='relu'))
+	top_model.add(Dense(1, activation='sigmoid'))
 	if verbose: top_model.summary()
 	return top_model
 

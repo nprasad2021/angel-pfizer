@@ -16,15 +16,11 @@ archs = networks.all_nets()
 
 for m in archs:
 	print(m)
-
 	base_model = archs[m](input_shape)
-
 	top_model = networks.top_model(input_shape=base_model.output_shape[1:])
-
 	model = Model(inputs=base_model.input, outputs=top_model(base_model.output))
-	
 	model.compile(optimizer=optimizers.Adam(), 
-                      loss='categorical_crossentropy', 
+                      loss='binary_crossentropy', 
                       metrics=['accuracy'])
 
 	training_generator, validation_generator = data_processing.get_gen_no_transform(dataset)
