@@ -1,6 +1,6 @@
 import keras
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten
+from keras.layers import Dense, Dropout, Flatten, BatchNormalization
 from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
 from keras.applications import resnet50, inception_v3, vgg16, inception_resnet_v2
@@ -44,24 +44,18 @@ def audio_model(input_shape=(224,224,3)):
     nb_layers = 4
 
     model = Sequential()
-    model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1],
+    model.add(Conv2D(nb_filters, kernel_size[0], kernel_size[1],
                         border_mode='valid', input_shape=input_shape))
     model.add(BatchNormalization(axis=-1))
     model.add(Activation('relu'))
 
     for layer in range(nb_layers-1):
-        model.add(Convolution2D(nb_filters, kernel_size[0], kernel_size[1]))
+        model.add(Conv2D(nb_filters, kernel_size[0], kernel_size[1]))
         model.add(BatchNormalization(axis=-1))
-        model.add(ELU(alpha=1.0))  
+        model.add(Activation('elu'))  
         model.add(MaxPooling2D(pool_size=pool_size))
         model.add(Dropout(0.25))
 
-    model.add(Flatten())
-    model.add(Dense(128))
-    model.add(Activation('relu'))
-    model.add(Dropout(0.5))
-    model.add(Dense(1))
-    model.add(Activation("sigmoid"))
     return model
 
 def all_nets():
