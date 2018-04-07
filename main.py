@@ -12,8 +12,8 @@ os.chdir(ROOT_PATH)
 
 num_classes=2
 input_shape = (224,224,3)
-batch_size=10
-epochs=2
+batch_size=60
+epochs=10
 dataset = 'melspectrograms'
 
 archs = networks.all_nets()
@@ -33,7 +33,7 @@ for m in archs:
 	tensorboard = TensorBoard(log_dir="logs/" + m)
 
 	best_model_checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-	callbacks_list = [best_model_checkpoint, tensorboard]
+	callbacks_list = [best_model_checkpoint]
 
 	nb_training_samples = 0
 	nb_validation_samples = 0
@@ -49,7 +49,9 @@ for m in archs:
     	steps_per_epoch=nb_training_samples/batch_size,
     	epochs=epochs,
     	validation_data=validation_generator,
-    	validation_steps=nb_validation_samples/batch_size)
+    	validation_steps=nb_validation_samples/batch_size,
+    	callbacks_list=callbacks_list,
+    	verbose=2)
 
 
 
