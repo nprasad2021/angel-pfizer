@@ -10,7 +10,7 @@ def get_gen_no_transform(dataset, batch_size=40, epochs=200, img_dim = (224,224)
 
     input_tensor = Input(shape=input_shape)
     
-    training_data_dir = '../data/' + dataset + '/train/'
+    training_data_dir = 'data/' + dataset + '/train/'
     training_datagen = image.ImageDataGenerator(
         rescale=1./255)
 
@@ -20,7 +20,7 @@ def get_gen_no_transform(dataset, batch_size=40, epochs=200, img_dim = (224,224)
         batch_size=batch_size)
 
     # validation generator configuration
-    validation_data_dir = '../data/' + dataset + '/'
+    validation_data_dir = './data/' + dataset + '/validation/'
 
     validation_datagen = image.ImageDataGenerator(
         rescale=1./255)
