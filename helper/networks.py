@@ -27,7 +27,7 @@ def inception_res(input_shape=(224,224,3)):
     return inception_resnet_v2.InceptionResNetV2(input_shape=input_shape, include_top=False, weights=None)
 
 def top_model(input_shape, verbose=False):
-
+    model = Sequential()
     model.add(Flatten(input_shape=input_shape))
     model.add(Dense(128))
     model.add(Activation('relu'))
