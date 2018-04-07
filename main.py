@@ -39,8 +39,8 @@ for m in archs:
 	nb_validation_samples = 0
 
 	for ex in ['sick/', 'not_sick/']:
-		nb_training_samples += len([name for name in os.listdir('data/' + dataset + '/train/' + ex) if os.path.isfile(name)])
-		nb_validation_samples += len([name for name in os.listdir('data/' + dataset + '/validation/' + ex) if os.path.isfile(name)])
+		nb_training_samples += len([name for name in os.listdir('data/' + dataset + '/train/' + ex) if os.path.isfile('data/' + dataset + '/train/' + ex + name)])
+		nb_validation_samples += len([name for name in os.listdir('data/' + dataset + '/validation/' + ex) if os.path.isfile('data/' + dataset + '/validation/' + ex + name)])
 
 	print(nb_training_samples, nb_validation_samples)
 
