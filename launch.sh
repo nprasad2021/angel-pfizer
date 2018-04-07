@@ -7,6 +7,10 @@
 #SBATCH -t 00:20:00
 #SBATCH --workdir=./subs/neeraj/
 
+module load openmind/singularity/2.4.5
+module add openmind/cuda/8.0
+module add openmind/cudnn/8.0-5.1
+
 PATH=/om/user/nprasad/angel-pfizer/
 
 cd ..
