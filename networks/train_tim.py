@@ -17,7 +17,7 @@ from keras.optimizers import SGD, Adam
 train_data_path = "./data/melspectrograms/train"
 val_data_path = "./data/melspectrograms/validation"
 
-BATCH_SIZE = 32
+BATCH_SIZE = 8
 NUM_EPOCH = 50
 
 class CustomLRScheduler(Callback):
@@ -81,11 +81,12 @@ else:
     X_train, y_train, X_val, y_val = pkl.load(open("./data/melspectrograms/pickled.pkl", "rb"))
 
 
+class_ratio = np.sum(y_train)/len(y_train)
 
 imsize = X_train[0].shape
 timestamp = datetime.now().strftime("%d_%H_%M")
 
-es = EarlyStopping(min_delta=0.1, patience = 15)
+es = EarlyStopping(min_delta=0.1, patience = 15, verbose=True)
 tb = TensorBoard(f"./logs/{timestamp}",
                 histogram_freq=5,
                 write_graph=False,
@@ -95,11 +96,18 @@ lr = CustomLRScheduler(lr_sched, verbose = 1)
 
 input = Input(shape = imsize)
 x = Conv2D(32, (3, 3), activation = "linear")(input)
+x = BatchNormalization()(x)
 x = LeakyReLU()(x)
-x = MaxPool2D((3,3))(x)
+x = MaxPool2D((2,2))(x)
+x = Conv2D(32, (3, 3), activation = "linear")(x)
+x = LeakyReLU()(x)
+x = MaxPool2D((2,2))(x)
+x = Conv2D(64, (3, 3), activation = "linear")(x)
+x = LeakyReLU()(x)
+x = MaxPool2D((2,2))(x)
 x = Dropout(0.5)(x)
 x = Flatten()(x)
-x = Dense(64, activation = "relu")(x)
+x = Dense(32, activation = "relu")(x)
 
 predictions = Dense(1, activation = 'sigmoid')(x)
 
@@ -109,6 +117,6 @@ model.summary()
 model.compile(optimizer = "sgd", loss = "binary_crossentropy", metrics = ["accuracy"])
 model.fit(X_train, y_train, 
             batch_size = BATCH_SIZE,
-            validation_data = (X_val, y_val), 
+            validation_data = (X_val, y_val),
             epochs = NUM_EPOCH, 
             callbacks = [es, lr])
