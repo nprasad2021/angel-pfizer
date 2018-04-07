@@ -4,7 +4,10 @@ from keras.callbacks import ModelCheckpoint, TensorBoard
 from keras import optimizers
 import os
 import os.path
+import sys
 
+ROOT_PATH = sys.argv[1]
+os.chdir(ROOT_PATH)
 
 num_classes=2
 input_shape = (224,224,3)
