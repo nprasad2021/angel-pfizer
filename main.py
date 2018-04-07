@@ -7,6 +7,7 @@ import os.path
 import sys
 
 ROOT_PATH = sys.argv[1]
+print(ROOT_PATH)
 os.chdir(ROOT_PATH)
 
 num_classes=2
