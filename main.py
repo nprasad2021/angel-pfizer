@@ -29,10 +29,7 @@ for m in archs:
 	print(os.getcwd())
 	training_generator, validation_generator = data_processing.get_gen(dataset)
 
-	filepath = 'models/' + m + "/"
-	if not os.path.exists(filepath):
-		os.makedirs(filepath)
-
+	filepath = 'models/' + m + ".hdf5"
 	tensorboard = TensorBoard(log_dir="logs/" + m + '/')
 
 	best_model_checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
