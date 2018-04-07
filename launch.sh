@@ -7,8 +7,8 @@
 #SBATCH -t 00:20:00
 #SBATCH --workdir=./subs/neeraj/
 
-
+PATH_ANGEL="/om/user/nprasad/angel-pfizer"
 
 cd ..
 singularity exec -B /om:/om --nv /om/user/nprasad/singularity/belledon-tensorflow-keras-master-latest.simg \
-python /om/user/nprasad/angel-pfizer/main.py $PATH
+python /om/user/nprasad/angel-pfizer/main.py $PATH_ANGEL
