@@ -29,3 +29,5 @@ def get_gen_no_transform(dataset, batch_size=40, epochs=200, img_dim = (224,224)
         validation_data_dir,
         target_size=(img_height, img_width),
         batch_size=batch_size)
+
+    return training_generator, validation_generator

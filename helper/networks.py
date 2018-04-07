@@ -20,16 +20,16 @@ def simple_cnn(num_classes=2, input_shape=(224,224,3)):
     return model
 
 def vggnet(num_classes=2, input_shape=(224,224,3)):
-    return vgg16.VGG16(classes=num_classes, input_shape=input_shape)
+    return vgg16.VGG16(classes=num_classes, input_shape=input_shape, include_top=False)
 
 def resnet(num_classes=2, input_shape=(224,224,3)):
-    return resnet50.ResNet50(classes=num_classes, input_shape=input_shape)
+    return resnet50.ResNet50(classes=num_classes, input_shape=input_shape, include_top=False)
 
 def inceptionv3(num_classes=2, input_shape=(224,224,3)):
-    return inception_v3.InceptionV3(input_shape=input_shape, classes=num_classes)
+    return inception_v3.InceptionV3(input_shape=input_shape, classes=num_classes, include_top=False)
 
 def inception_res(num_classes=2, input_shape=(224,224,3)):
-    return inception_resnet_v2.InceptionResNetV2(input_shape=input_shape, classes=num_classes)
+    return inception_resnet_v2.InceptionResNetV2(input_shape=input_shape, classes=num_classes, include_top=False)
 
 def all_nets():
     return {'simple_cnn':simple_cnn, 'vggnet':vggnet,
