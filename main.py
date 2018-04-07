@@ -22,8 +22,8 @@ for m in archs:
 	model.compile(optimizer=optimizers.Adam(), 
                       loss='binary_crossentropy', 
                       metrics=['accuracy'])
-
-	training_generator, validation_generator = data_processing.get_gen_no_transform(dataset)
+	print(os.getcwd())
+	training_generator, validation_generator = data_processing.get_gen(dataset)
 
 	filepath = 'models/' + m
 	tensorboard = TensorBoard(log_dir="logs/" + m)
