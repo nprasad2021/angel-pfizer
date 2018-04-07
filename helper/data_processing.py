@@ -5,8 +5,8 @@ from glob import glob
 import os
 
 # training generator configuration
-def get_gen_no_transform(dataset, batch_size=40, epochs=200, img_dim = (224,224), input_shape=(224,224,3)):
-
+def get_gen(dataset, batch_size=40, epochs=200, img_dim = (224,224), input_shape=(224,224,3)):
+    print(os.getcwd())
     # dimensions of our images.
     img_width, img_height = img_dim
 
