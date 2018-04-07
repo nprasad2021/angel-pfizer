@@ -6,6 +6,7 @@
 #SBATCH --gres=gpu:titan-x:1
 #SBATCH -t 00:20:00
 #SBATCH --workdir=./subs/neeraj/
+#SBATCH --qos=cbmm
 
 
 cd ..
