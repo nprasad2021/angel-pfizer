@@ -36,8 +36,7 @@ class CustomLRScheduler(Callback):
             raise ValueError('Optimizer must have a "lr" attribute.')
         last_lr = K.get_value(self.model.optimizer.lr)
         lr = self.schedule(last_lr)
-        if self.verbose:
-            print(f"New learning rate is {lr}")
+
         if not isinstance(lr, (float, np.float32, np.float64)):
             raise ValueError('The output of the "schedule" function '
                              'should be float.')
