@@ -44,13 +44,13 @@ def audio_model(input_shape=(224,224,3)):
     nb_layers = 4
 
     model = Sequential()
-    model.add(Conv2D(nb_filters, kernel_size[0], kernel_size[1],
+    model.add(Conv2D(nb_filters, (kernel_size[0], kernel_size[1]),
                         border_mode='valid', input_shape=input_shape))
     model.add(BatchNormalization(axis=-1))
     model.add(Activation('relu'))
 
     for layer in range(nb_layers-1):
-        model.add(Conv2D(nb_filters, kernel_size[0], kernel_size[1]))
+        model.add(Conv2D(nb_filters, (kernel_size[0], kernel_size[1])))
         model.add(BatchNormalization(axis=-1))
         model.add(Activation('elu'))  
         model.add(MaxPooling2D(pool_size=pool_size))
