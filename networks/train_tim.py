@@ -1,26 +1,47 @@
 
+import os
+import pickle as pkl
+from datetime import datetime
+from glob import glob
+from math import exp
+
+import numpy as np
+from keras.callbacks import EarlyStopping, TensorBoard, Callback
 from keras.layers import *
 from keras.models import Model
-import numpy as np
-import os
-from scipy.misc import imread, imresize
-from keras.callbacks import EarlyStopping
-from glob import glob
-import pickle as pkl
-import joblib
-
 from keras.preprocessing.image import ImageDataGenerator
+from keras import backend as K
+from scipy.misc import imread, imresize
+from keras.optimizers import SGD, Adam
 
 train_data_path = "./data/melspectrograms/train"
 val_data_path = "./data/melspectrograms/validation"
 
-BATCH_SIZE = 4
+BATCH_SIZE = 32
 NUM_EPOCH = 50
 
+class CustomLRScheduler(Callback):
 
-imsize = (480, 640, 1)
+    def __init__(self, schedule, verbose = True):
+        super(CustomLRScheduler, self).__init__()
+        self.schedule = schedule
+        self.verbose = verbose
 
-#if not os.path.exists("./data/melspectrograms/pickled.pkl"):
+    def on_epoch_begin(self, epoch, logs=None):
+        if not hasattr(self.model.optimizer, 'lr'):
+            raise ValueError('Optimizer must have a "lr" attribute.')
+        last_lr = K.get_value(self.model.optimizer.lr)
+        lr = self.schedule(last_lr)
+        if self.verbose:
+            print(f"New learning rate is {lr}")
+        if not isinstance(lr, (float, np.float32, np.float64)):
+            raise ValueError('The output of the "schedule" function '
+                             'should be float.')
+        K.set_value(self.model.optimizer.lr, lr)
+
+def lr_sched(last_lr):
+
+    return 0.99*last_lr
 
 def pull_data(path):
 
@@ -30,6 +51,7 @@ def pull_data(path):
         train_files = glob(f"{path}/{img_class}/*.png")
         for f in train_files:
             img = imread(f, 'L')
+            img = imresize(img, size = 0.5)
             img = img.astype(np.float32)
             train.append(img)
             if img_class == "sick":
@@ -44,38 +66,49 @@ def pull_data(path):
 
     return X_train, y_train
 
-X_train, y_train = pull_data(train_data_path)
-X_train /= 255
+if not os.path.exists("./data/melspectrograms/pickled.pkl"):
+    X_train, y_train = pull_data(train_data_path)
+    X_train /= 255
 
-X_val, y_val = pull_data(val_data_path)
-X_val /= 255
+    X_val, y_val = pull_data(val_data_path)
+    X_val /= 255
 
-data_mean = np.mean(X_train)
-X_train -= data_mean
-X_val -= data_mean
+    data_mean = np.mean(X_train)
+    X_train -= data_mean
+    X_val -= data_mean
+    pkl.dump([X_train, y_train, X_val, y_val], open("./data/melspectrograms/pickled.pkl", "wb"))
+else:
+    X_train, y_train, X_val, y_val = pkl.load(open("./data/melspectrograms/pickled.pkl", "rb"))
 
+
+
+imsize = X_train[0].shape
+timestamp = datetime.now().strftime("%d_%H_%M")
 
 es = EarlyStopping(min_delta=0.1, patience = 15)
+tb = TensorBoard(f"./logs/{timestamp}",
+                histogram_freq=5,
+                write_graph=False,
+                write_grads=True)
+
+lr = CustomLRScheduler(lr_sched, verbose = 1)
 
 input = Input(shape = imsize)
 x = Conv2D(32, (3, 3), activation = "linear")(input)
-x = BatchNormalization()(x)
-x = Activation('relu')(x)
-x = MaxPool2D(3,3)(x)
-x = Conv2D(32, (3, 3), activation = "linear")(x)
-x = Activation('relu')(x)
-x = MaxPool2D(3,3)(x)
+x = LeakyReLU()(x)
+x = MaxPool2D((3,3))(x)
+x = Dropout(0.5)(x)
 x = Flatten()(x)
+x = Dense(64, activation = "relu")(x)
 
 predictions = Dense(1, activation = 'sigmoid')(x)
 
 model = Model(inputs = input, outputs = predictions)
 model.summary()
-model.compile(optimizer = "adam", loss = "binary_crossentropy", metrics = ["accuracy"])
+
+model.compile(optimizer = "sgd", loss = "binary_crossentropy", metrics = ["accuracy"])
 model.fit(X_train, y_train, 
             batch_size = BATCH_SIZE,
             validation_data = (X_val, y_val), 
             epochs = NUM_EPOCH, 
-            callbacks = [es])
-
-
+            callbacks = [es, lr])
