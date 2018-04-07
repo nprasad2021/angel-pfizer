@@ -38,6 +38,7 @@ def get_gen_no_transform(dataset, batch_size=40, epochs=200, img_dim = (224,224)
 
 def collect_data(dataset, ext):
 
+    '''
     train_data_path = "./data/" + dataset + "/train/"
     val_data_path = "./data/" + dataset + "/validation/"
 
@@ -86,6 +87,8 @@ def collect_data(dataset, ext):
         X_train, y_train, X_val, y_val = pkl.load(open("./data/" + dataset + "/pickled.pkl", "rb"))
 
     return X_train, y_train, X_val, y_val
+    '''
+    pass
 
 
     
