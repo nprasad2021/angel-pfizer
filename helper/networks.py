@@ -1,7 +1,7 @@
 import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization, LeakyReLU
-from keras.layers import Conv2D, MaxPooling2D, Activation, Input
+from keras.layers import Conv2D, MaxPooling2D, Activation, Input, 
 from keras import backend as K
 from keras.applications import resnet50, inception_v3, vgg16, inception_resnet_v2
 
@@ -126,19 +126,19 @@ def jaron(input_shape=(224,224,3), freeze=0):
     # shape (24,1,f,f).  This is followed by (4,2) max-pooling over the last
     # two dimensions and a ReLU activation function
     model.add(Conv2D(24, (f_size, f_size), padding='same', input_shape=input_shape))
-    model.add(MaxPooling2D(pool_size=(4, 2)))
+    model.add(MaxPool2D(pool_size=(4, 2)))
     model.add(Activation('relu'))
 
     # Layer 2 - 48 filters with a receptive field of (f,f), i.e. W has the 
     # shape (48, 24, f, f). Like L1 this is followed by (4,2) max-pooling 
     # and a ReLU activation function.
     model.add(Conv2D(48, (f_size, f_size), padding='same'))
-    model.add(MaxPooling2D(pool_size=(4, 2)))
+    model.add(MaxPool2D(pool_size=(4, 2)))
     model.add(Activation('relu'))
 
     # Layer 3 - 48 filters with a receptive field of (f,f), i.e. W has the
     # shape (48, 48, f, f). This is followed by a ReLU but no pooling.
-    model.add(Conv2D(48, (f_size, f_size), border_mode='valid'))
+    model.add(Conv2D(48, (f_size, f_size), padding='valid'))
     model.add(Activation('relu'))
 
     return model
