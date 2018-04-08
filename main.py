@@ -55,7 +55,7 @@ def run():
 		nb_validation_samples += len([name for name in os.listdir('data/' + dataset + '/validation/' + ex) if os.path.isfile('data/' + dataset + '/validation/' + ex + name)])
 
 	print(nnet, dataset)
-	'''
+	
 	model.fit_generator(
 		training_generator,
 		steps_per_epoch=nb_training_samples/batch_size,
@@ -64,7 +64,7 @@ def run():
 		validation_steps=nb_validation_samples/batch_size,
 		callbacks = callbacks_list,
 		verbose=2)
-	'''
+	
 	acc = model.evaluate_generator(
 		validation_generator,
 		steps=nb_validation_samples/batch_size)
