@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH -n 4
-#SBATCH --array=0-51
+#SBATCH --array=6
 #SBATCH --job-name=all_exp
 #SBATCH --mem=10GB
 #SBATCH --gres=gpu:titan-x:1
