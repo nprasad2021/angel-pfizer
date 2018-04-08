@@ -3,6 +3,8 @@ from keras.models import *
 from keras.layers import *
 from keras import backend as K
 from keras.applications import resnet50, inception_v3, vgg16, inception_resnet_v2
+from keras import optimizers
+
 
 def simple_cnn(input_shape=(224,224,3), freeze=0):
     model = Sequential()
@@ -37,7 +39,7 @@ def inception_res(input_shape=(224,224,3), freeze=0):
         layer.trainable = False
     return model
 
-def top_model(input_shape, freeze=0, verbose=False):
+def top_init(input_shape, freeze=0, verbose=False):
     model = Sequential()
     model.add(Flatten(input_shape=input_shape))
     model.add(Dense(128))
@@ -46,6 +48,27 @@ def top_model(input_shape, freeze=0, verbose=False):
     model.add(Dense(1))
     model.add(Activation("sigmoid"))
     return model
+
+def top_long(input_shape, freeze=0, verbose=False):
+    model = Sequential()
+    model.add(Flatten(input_shape=input_shape))
+    model.add(Dense(256))
+    model.add(Activation('relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(128))
+    model.add(Activation('relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(1))
+    model.add(Activation("sigmoid"))
+    return model
+
+def top_short(input_shape, freeze=0, verbose=False):
+    input = Input(shape = input_shape)
+    x = Flatten()(input)
+    x = Dense(32, activation = "relu")(x)
+    predictions = Dense(1, activation = 'sigmoid')(x)
+
+    return Model(inputs=input, outputs=predictions)
 
 def audio_model(input_shape=(224,224,3), freeze=0):
 
@@ -139,8 +162,38 @@ def jaron(input_shape=(224,224,3), freeze=0):
 
     return model
 
+def vgg_by_hand(input_shape=(224,224,3), freeze=0)
+    model = Sequential([
+        Conv2D(64, (3, 3), input_shape=input_shape, padding='same',
+               activation='relu'),
+        Conv2D(64, (3, 3), activation='relu', padding='same'),
+        MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+        Conv2D(128, (3, 3), activation='relu', padding='same'),
+        Conv2D(128, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(0.01)),
+        MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+        Conv2D(256, (3, 3), activation='relu', padding='same',),
+        Conv2D(256, (3, 3), activation='relu', padding='same',),
+        Conv2D(256, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(0.01)),
+        MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+        Conv2D(512, (3, 3), activation='relu', padding='same',),
+        Conv2D(512, (3, 3), activation='relu', padding='same',),
+        Conv2D(512, (3, 3), activation='relu', padding='same', kernel_regularizer=regularizers.l2(0.01)),
+        MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+        Conv2D(512, (3, 3), activation='relu', padding='same',),
+        Conv2D(512, (6, 6), activation='relu', padding='same', kernel_regularizer=regularizers.l2(0.01)),
+        Conv2D(512, (3, 3), activation='relu', padding='same',),
+        MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+    ])
+    for layer in model.layers[:freeze]:
+        layer.trainable = False
+    return model
+
 def all_nets():
     return {'simple_cnn':simple_cnn, 'vggnet':vggnet,
            'resnet':resnet, 'inceptionv3':inceptionv3,
            'inception_res':inception_res, 'audio_model':audio_model,
-           'audio_model_2':audio_model_2, 'tim_model':tim_model, 'jaron':jaron}
+           'audio_model_2':audio_model_2, 'tim_model':tim_model, 'jaron':jaron,
+           'vgg_by_hand':vgg_by_hand}
+
+def all_top():
+    return {'top_init':top_init, 'top_long':top_long, 'top_short':top_short}
