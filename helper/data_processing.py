@@ -6,6 +6,7 @@ import os
 from keras import backend as K
 from keras.callbacks import ModelCheckpoint, TensorBoard, EarlyStopping, Callback
 from keras.models import Model
+import numpy as np
 
 
 # training generator configuration

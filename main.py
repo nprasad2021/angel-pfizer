@@ -33,7 +33,7 @@ def run():
 	top_model = networks.top_model(input_shape=base_model.output_shape[1:])
 	model = Model(inputs=base_model.input, outputs=top_model(base_model.output))
 
-	lr = data_processing.CustomLRScheduler(lr_sched, verbose = 1)
+	lr = data_processing.CustomLRScheduler(data_processing.lr_sched, verbose = 1)
 	model.compile(optimizer=optimizers.SGD(), 
 	                  loss='binary_crossentropy', 
 	                  metrics=['accuracy'])
@@ -71,7 +71,7 @@ def run():
 		f.write("accuracy:  " + acc + "   nnet: " + nnet + "  dataset: " + dataset + "  frozen: " + str(num_frozen))
 	
 	print(nnet, dataset)
-	
+
 if __name__ == "__main__":
 	run()
 
