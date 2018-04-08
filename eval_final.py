@@ -50,6 +50,10 @@ def MadMaxPool(team_name='madmaxpool', path_to_data_source='/om/user/nprasad/ang
         elapsed_time = time.time() - start_time
 
         predictions[idx, 0] = np.argmax(y_pred) == np.argmax(y_test)
+        
+        print(y_pred)
+        print(y_test)
+
         predictions[idx,1] = elapsed_time
         idx += 1
 
