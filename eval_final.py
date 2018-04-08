@@ -41,7 +41,7 @@ def MadMaxPool(team_name='madmaxpool', path_to_data_source='/om/user/nprasad/ang
         # calclate time to read data and obtain prediction
         start_time = time.time()
         x_test, y_test = testing_generator.next()
-        y_pred = loaded_model.predict(x_test, batch_size=1)
+        y_pred = model.predict(x_test, batch_size=1)
         elapsed_time = time.time() - start_time
 
         predictions[idx, 0] = np.argmax(y_pred) == np.argmax(y_test)
