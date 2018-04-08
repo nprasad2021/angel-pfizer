@@ -1,6 +1,6 @@
 # Deep Learning to Classify Respiratory Sounds
 
-2nd place, Digital Health Challenge at the CMG Hackathon
+## 2nd place, Digital Health Challenge at the CMG Hackathon
 
 Built a deep learning classifier to differentiate between sick and not-sick patients.
 Final model - 87.6% accuracy on test set
