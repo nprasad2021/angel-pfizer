@@ -1,5 +1,5 @@
 import keras
-from keras.models import Sequential
+from keras.models import *
 from keras.layers import *
 from keras import backend as K
 from keras.applications import resnet50, inception_v3, vgg16, inception_resnet_v2
