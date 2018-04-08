@@ -19,7 +19,9 @@ def get_gen(dataset, batch_size=40, epochs=200, img_dim = (224,224), input_shape
     
     training_data_dir = './data/' + dataset + '/train/'
     training_datagen = image.ImageDataGenerator(
-        rescale=1./255)
+        rescale=1./255,
+        featurewise_center=True,
+        featurewise_std_normalization=True)
 
     training_generator = training_datagen.flow_from_directory(
         training_data_dir,
@@ -31,7 +33,9 @@ def get_gen(dataset, batch_size=40, epochs=200, img_dim = (224,224), input_shape
     validation_data_dir = './data/' + dataset + '/validation/'
 
     validation_datagen = image.ImageDataGenerator(
-        rescale=1./255)
+        rescale=1./255,
+        featurewise_center=True,
+        featurewise_std_normalization=True)
 
     validation_generator = validation_datagen.flow_from_directory(
         validation_data_dir,
