@@ -58,7 +58,7 @@ def MadMaxPool(team_name='madmaxpool', path_to_data_source='/om/user/nprasad/ang
     std_time = round(np.std(predictions[:,1]), 8)
 
     # path to csv file for performance recordings
-    path_to_csv = 'sickness_model_performances_2.csv'
+    path_to_csv = 'sickness_model_performances_3.csv'
     colnames = ['team_name', 'model_name', 'test_acc', 'avg_time', 'std_time']
     
     if not os.path.exists(path_to_csv):
