@@ -13,7 +13,7 @@ IMG_HEIGHT = 224
 IMG_WIDTH = 224
 BATCH_SIZE = 1
 
-def MadMaxPool(team_name='madmaxpool', path_to_data_source='/om/user/nprasad/angel-pfizer/data/continuous_wavelet_transform', path_to_model_weights='/om/user/nprasad/angel-pfizer/models/5/top_long/cwt_images/vggnet.hdf5'):
+def MadMaxPool(team_name='madmaxpool', path_to_data_source='/om/user/nprasad/angel-pfizer/data/test/melspectrograms', path_to_model_weights='/om/user/nprasad/angel-pfizer/models/0/top_short/melspectrograms/vggnet.hdf5'):
     # load json file and recreate model
 
     model = load_model(path_to_model_weights)
@@ -53,7 +53,7 @@ def MadMaxPool(team_name='madmaxpool', path_to_data_source='/om/user/nprasad/ang
     std_time = round(np.std(predictions[:,1]), 8)
 
     # path to csv file for performance recordings
-    path_to_csv = 'sickness_model_performances.csv'
+    path_to_csv = 'sickness_model_performances_2.csv'
     colnames = ['team_name', 'model_name', 'test_acc', 'avg_time', 'std_time']
     
     if not os.path.exists(path_to_csv):
