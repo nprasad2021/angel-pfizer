@@ -26,14 +26,19 @@ epochs=opt['num_epochs']
 num_frozen = opt['freeze']
 output_path = opt['output_file']
 
+
+top_model = opt['top_model']
+
+all_top = networks.all_top()
 archs = networks.all_nets()
 print(nnet, dataset, num_frozen)
+
 
 def run():
 
 	base_model = archs[nnet](input_shape, num_frozen)
-	top_model = networks.top_model(input_shape=base_model.output_shape[1:])
-	model = Model(inputs=base_model.input, outputs=top_model(base_model.output))
+	top_modality = all_top[top_model](input_shape=base_model.output_shape[1:])
+	model = Model(inputs=base_model.input, outputs=top_modality(base_model.output))
 
 	lr = data_processing.CustomLRScheduler(data_processing.lr_sched, verbose = 1)
 	model.compile(optimizer=optimizers.SGD(), 
@@ -42,10 +47,13 @@ def run():
 
 	training_generator, validation_generator = data_processing.get_gen(dataset)
 
-	filepath = 'models/' + nnet + ".hdf5"
+	filepath = 'models/' + str(num_frozen) + '/' + top_model + '/' + dataset + '/'
+	if not os.path.exists(filepath):
+		os.makedirs(filepath)
+
 	tensorboard = TensorBoard(log_dir="logs/" + nnet + '/')
 	es = EarlyStopping(min_delta=0.1, patience = 15)
-	best_model_checkpoint = ModelCheckpoint(filepath, monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+	best_model_checkpoint = ModelCheckpoint(filepath + nnet + ".hdf5", monitor='val_acc', verbose=1, save_best_only=True, mode='max')
 	callbacks_list = [best_model_checkpoint, lr, es]
 
 	nb_training_samples = 0
