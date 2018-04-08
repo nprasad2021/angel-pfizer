@@ -37,7 +37,7 @@ def MadMaxPool(team_name='madmaxpool', path_to_data_source='/om/user/nprasad/ang
     
     while testing_generator.total_batches_seen < files_count:
         if idx % 200 == 0:
-            print idx
+            print(idx)
         # calclate time to read data and obtain prediction
         start_time = time.time()
         x_test, y_test = testing_generator.next()
