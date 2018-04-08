@@ -105,11 +105,8 @@ def tim_model(input_shape=(224,224,3), freeze=0):
                 kernel_regularizer=regularizers.l2(0.01))(x)
     x = LeakyReLU()(x)
     x = MaxPooling2D((2,2))(x)
-    x = Dropout(0.5)(x)
-    x = Flatten()(x)
-    x = Dense(32, activation = "relu")(x)
+    predictions = Dropout(0.5)(x)
 
-    predictions = Dense(1, activation = 'sigmoid')(x)
     model = Model(inputs = input, outputs = predictions)
 
     return model
