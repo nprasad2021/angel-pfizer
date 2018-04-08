@@ -27,6 +27,7 @@ num_frozen = opt['freeze']
 output_path = opt['output_file']
 
 archs = networks.all_nets()
+print(nnet)
 def run():
 
 	base_model = archs[nnet](input_shape, num_frozen)
@@ -68,7 +69,7 @@ def run():
 		steps=nb_validation_samples/batch_size)
 
 	with open('outputs.txt', 'w') as f:
-		f.write("accuracy:  " + acc + "   nnet: " + nnet + "  dataset: " + dataset + "  frozen: " + str(num_frozen))
+		f.write("accuracy:  " + acc[1] + "   nnet: " + nnet + "  dataset: " + dataset + "  frozen: " + str(num_frozen))
 	
 	print(nnet, dataset)
 

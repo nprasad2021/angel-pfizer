@@ -18,21 +18,25 @@ def vggnet(input_shape=(224,224,3), freeze=0):
     model = vgg16.VGG16(input_shape=input_shape, include_top=False)
     for layer in model.layers[:freeze]:
         layer.trainable = False
+    return model
 
 def resnet(input_shape=(224,224,3), freeze=0):
     model = resnet50.ResNet50(input_shape=input_shape, include_top=False)
     for layer in model.layers[:freeze]:
         layer.trainable = False
+    return model
 
 def inceptionv3(input_shape=(224,224,3), freeze=0):
     model = inception_v3.InceptionV3(input_shape=input_shape, include_top=False)
     for layer in model.layers[:freeze]:
         layer.trainable = False
+    return model
 
 def inception_res(input_shape=(224,224,3), freeze=0):
     model = inception_resnet_v2.InceptionResNetV2(input_shape=input_shape, include_top=False)
     for layer in model.layers[:freeze]:
         layer.trainable = False
+    return model
 
 def top_model(input_shape, freeze=0, verbose=False):
     model = Sequential()
