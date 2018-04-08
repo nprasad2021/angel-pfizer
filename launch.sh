@@ -4,7 +4,7 @@
 #SBATCH --job-name=all_exp
 #SBATCH --mem=10GB
 #SBATCH --gres=gpu:titan-x:1
-#SBATCH -t 02:00:00
+#SBATCH -t 03:00:00
 #SBATCH --workdir=./subs/all/
 
 PATH_ANGEL="/om/user/nprasad/angel-pfizer"
