@@ -1,11 +1,11 @@
 #!/bin/bash
 #SBATCH -n 4
 #SBATCH --array=0-18
-#SBATCH --job-name=neeraj_exp
+#SBATCH --job-name=all_exp
 #SBATCH --mem=10GB
 #SBATCH --gres=gpu:titan-x:1
-#SBATCH -t 01:00:00
-#SBATCH --workdir=./subs/neeraj/
+#SBATCH -t 02:00:00
+#SBATCH --workdir=./subs/all
 
 PATH_ANGEL="/om/user/nprasad/angel-pfizer"
 

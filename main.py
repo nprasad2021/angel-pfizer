@@ -23,11 +23,13 @@ num_classes= opt['num_classes']
 input_shape = (224,224,3)
 batch_size=opt['batch_size']
 epochs=opt['num_epochs']
+num_frozen = opt['freeze']
+output_path = opt['output_file']
 
 archs = networks.all_nets()
 def run():
 
-	base_model = archs[nnet](input_shape)
+	base_model = archs[nnet](input_shape, num_frozen)
 	top_model = networks.top_model(input_shape=base_model.output_shape[1:])
 	model = Model(inputs=base_model.input, outputs=top_model(base_model.output))
 
@@ -61,9 +63,18 @@ def run():
 		callbacks = callbacks_list,
 		verbose=2)
 
+	acc = model.evaluate_generator(
+		validation_generator,
+		steps=nb_validation_samples/batch_size)
+
+	with open('outputs.txt', 'w') as f:
+		f.write("accuracy:  " + acc + "   nnet: " + nnet + "  dataset: " + dataset + "  frozen: " + str(num_frozen))
+	
+	print(nnet, dataset)
+	
 if __name__ == "__main__":
 	run()
-	print(nnet, dataset)
+
 
 
 

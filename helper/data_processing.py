@@ -3,6 +3,10 @@ from keras.utils import multi_gpu_model
 from keras.layers import Input
 from glob import glob
 import os
+from keras import backend as K
+from keras.callbacks import ModelCheckpoint, TensorBoard, EarlyStopping, Callback
+from keras.models import Model
+
 
 # training generator configuration
 def get_gen(dataset, batch_size=40, epochs=200, img_dim = (224,224), input_shape=(224,224,3)):
@@ -36,59 +40,26 @@ def get_gen(dataset, batch_size=40, epochs=200, img_dim = (224,224), input_shape
 
     return training_generator, validation_generator
 
-def collect_data(dataset, ext):
+class CustomLRScheduler(Callback):
 
-    '''
-    train_data_path = "./data/" + dataset + "/train/"
-    val_data_path = "./data/" + dataset + "/validation/"
+    def __init__(self, schedule, verbose = True):
+        super(CustomLRScheduler, self).__init__()
+        self.schedule = schedule
+        self.verbose = verbose
 
-    if not os.path.exists("./data/" + dataset + "/pickled.pkl"):
-        
-        train = []
-        train_classes = []
-        for img_class in ["sick", "not_sick"]:
+    def on_epoch_begin(self, epoch, logs=None):
+        if not hasattr(self.model.optimizer, 'lr'):
+            raise ValueError('Optimizer must have a "lr" attribute.')
+        last_lr = K.get_value(self.model.optimizer.lr)
+        lr = self.schedule(last_lr)
 
-            train_files = glob(f"{train_data_path}/{img_class}/*.png")
+        if not isinstance(lr, (float, np.float32, np.float64)):
+            raise ValueError('The output of the "schedule" function '
+                             'should be float.')
+        K.set_value(self.model.optimizer.lr, lr)
 
-            for f in train_files:
-
-                img = imread(f)[:, :, :3]
-                img = imresize(img, 0.5)
-                train.append(img)
-
-                if img_class == "sick":
-                    train_classes.append(1)
-                else:
-                    train_classes.append(0)
-
-        X_train = np.array(train, dtype = np.int32)
-        y_train = np.array(train_classes, dtype = np.bool)
-
-        val = []
-        val_classes = []
-
-        for img_class in ["sick", "not_sick"]:
-            val_files = glob(f"{val_data_path}/{img_class}/*.png")
-
-            for f in val_files:
-                img = imread(f)[:, :, :3]
-                img = imresize(img, 0.5)
-                val.append(img)
-                if img_class == "sick":
-                    val_classes.append(1)
-                else:
-                    val_classes.append(0)
-
-        X_val = np.array(val, dtype = np.int32)
-        y_val = np.array(val_classes, dtype = np.bool)
-
-        pkl.dump([X_train, y_train, X_val, y_val], open("./data/" + dataset + "/pickled.pkl", "wb"))
-    else:
-        X_train, y_train, X_val, y_val = pkl.load(open("./data/" + dataset + "/pickled.pkl", "rb"))
-
-    return X_train, y_train, X_val, y_val
-    '''
-    pass
+def lr_sched(last_lr):
+    return 0.99*last_lr
 
 
     
