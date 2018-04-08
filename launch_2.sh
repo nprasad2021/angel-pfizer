@@ -6,7 +6,6 @@
 #SBATCH --gres=gpu:titan-x:1
 #SBATCH -t 03:00:00
 #SBATCH --workdir=./subs/ensemble/
-#SBATCH --qos=cbmm
 
 PATH_ANGEL="/om/user/nprasad/angel-pfizer"
 
