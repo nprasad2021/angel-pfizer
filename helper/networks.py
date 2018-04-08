@@ -195,5 +195,35 @@ def all_nets():
            'audio_model_2':audio_model_2, 'tim_model':tim_model, 'jaron':jaron,
            'vgg_by_hand':vgg_by_hand}
 
+def ensemble(nets, input_shape, num_frozen):
+
+    all_n = all_nets()
+    md_flat = []
+
+    for nn in range(len(nets)):
+        nnet = all_n[nets[nn]]
+        base_model = nnet(input_shape, num_frozen)
+
+        flt_model = Sequential()
+        flt_model.add(Flatten(input_shape=base_model.output_shape[1:]))
+        model_tmp = Model(inputs=base_model.input, outputs=flt_model(base_model.output))
+
+        md_flat.append(model_tmp)
+
+    mer_model = Sequential()
+    mer_model.add(Concatenate()(md_flat))
+
+    mer_model.add(Dense(256))
+    mer_model.add(Activation('relu'))
+    mer_model.add(Dropout(0.5))
+    mer_model.add(Dense(128))
+    mer_model.add(Activation('relu'))
+    mer_model.add(Dropout(0.5))
+    mer_model.add(Dense(1))
+    mer_model.add(Activation("sigmoid"))
+
+    return mer_model
+
+
 def all_top():
     return {'top_init':top_init, 'top_long':top_long, 'top_short':top_short}

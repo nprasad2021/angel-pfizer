@@ -67,4 +67,5 @@ def lr_sched(last_lr):
     return 0.99*last_lr
 
 
+
     
