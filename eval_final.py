@@ -68,9 +68,9 @@ def MadMaxPool(team_name='madmaxpool', path_to_data_source='/om/user/nprasad/ang
                   'std_time': std_time}
     
     print
-    print "%s obtained %.3f%% accuracy" % (team_name, 100*test_acc)
-    print "average prediction time: %.5f s" % (avg_time)
-    print "standard dev prediction time: %.5f s" % (std_time)
+    print("%s obtained %.3f%% accuracy" % (team_name, 100*test_acc))
+    print("average prediction time: %.5f s" % (avg_time))
+    print("standard dev prediction time: %.5f s" % (std_time))
 
     with open(path_to_csv, 'a') as f:
         writer = csv.DictWriter(f, delimiter=',', fieldnames=colnames)
