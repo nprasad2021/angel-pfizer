@@ -5,7 +5,7 @@
 #SBATCH --mem=10GB
 #SBATCH --gres=gpu:titan-x:1
 #SBATCH -t 03:00:00
-#SBATCH --workdir=./subs/all/
+#SBATCH --workdir=./subs/morn/
 
 PATH_ANGEL="/om/user/nprasad/angel-pfizer"
 

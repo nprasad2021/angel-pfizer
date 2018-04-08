@@ -73,10 +73,11 @@ def run():
 	print(acc)
 	print(model.metrics_names)
 
-	with open('outputs.txt', 'w') as f:
-		f.write("accuracy:  " + str(acc[1]) + "   nnet: " + nnet + "  dataset: " + dataset + "  frozen: " + str(num_frozen))
+	with open(output_path, 'a+') as f:
+		f.write("accuracy:  " + str(acc[1])[0:4] + "   nnet: " + nnet + "  dataset: " + dataset + "  frozen: " + str(num_frozen))
+		f.write('\n')
 	
-	print(nnet, dataset)
+	print(nnet, dataset, num_frozen)
 
 if __name__ == "__main__":
 	run()
