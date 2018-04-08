@@ -24,12 +24,14 @@ def MadMaxPool(team_name='madmaxpool', path_to_data_source='/om/user/nprasad/ang
     testing_datagen = image.ImageDataGenerator(
                     rescale=1./255,
                     featurewise_center=True,
-                    featurewise_std_normalization=True)
+                    featurewise_std_normalization=True,
+                    )
     
     testing_generator = testing_datagen.flow_from_directory(
         testing_data_dir,
         target_size=(IMG_HEIGHT, IMG_WIDTH),
-        batch_size=BATCH_SIZE
+        batch_size=BATCH_SIZE,
+        class_mode='binary'
         )
 
     keras.backend.set_learning_phase(0)
