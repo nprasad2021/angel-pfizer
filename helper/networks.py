@@ -1,7 +1,6 @@
 import keras
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten, BatchNormalization, LeakyReLU
-from keras.layers import Conv2D, MaxPooling2D, Activation, Input
+from keras.layers import *
 from keras import backend as K
 from keras.applications import resnet50, inception_v3, vgg16, inception_resnet_v2
 
@@ -97,15 +96,15 @@ def tim_model(input_shape=(224,224,3), freeze=0):
     x = Conv2D(32, (3, 3), activation = "linear")(input)
     x = BatchNormalization()(x)
     x = LeakyReLU()(x)
-    x = MaxPool2D((2,2))(x)
+    x = MaxPooling2D((2,2))(x)
     x = Conv2D(32, (3, 3), activation = "linear",
                 kernel_regularizer=regularizers.l2(0.01))(x)
     x = LeakyReLU()(x)
-    x = MaxPool2D((2,2))(x)
+    x = MaxPooling2D((2,2))(x)
     x = Conv2D(64, (3, 3), activation = "linear",
                 kernel_regularizer=regularizers.l2(0.01))(x)
     x = LeakyReLU()(x)
-    x = MaxPool2D((2,2))(x)
+    x = MaxPooling2D((2,2))(x)
     x = Dropout(0.5)(x)
     x = Flatten()(x)
     x = Dense(32, activation = "relu")(x)
@@ -133,7 +132,7 @@ def jaron(input_shape=(224,224,3), freeze=0):
     # shape (48, 24, f, f). Like L1 this is followed by (4,2) max-pooling 
     # and a ReLU activation function.
     model.add(Conv2D(48, (f_size, f_size), padding='same'))
-    model.add(MaxPool2D(pool_size=(4, 2)))
+    model.add(MaxPooling2D(pool_size=(4, 2)))
     model.add(Activation('relu'))
 
     # Layer 3 - 48 filters with a receptive field of (f,f), i.e. W has the
