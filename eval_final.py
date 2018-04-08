@@ -30,6 +30,8 @@ def MadMaxPool(team_name='madmaxpool', path_to_data_source='/om/user/nprasad/ang
         target_size=(IMG_HEIGHT, IMG_WIDTH),
         batch_size=BATCH_SIZE
         )
+    
+    keras.backend.set_learning_phase(0)
 
     idx = 0
     files_count = testing_generator.n
@@ -60,6 +62,7 @@ def MadMaxPool(team_name='madmaxpool', path_to_data_source='/om/user/nprasad/ang
         with open(path_to_csv, 'a') as f:
             writer = csv.writer(f)
             writer.writerow(colnames)
+
     model_name = 'final'
     csv_dict = {'team_name': team_name, 
                   'model_name': model_name, 
