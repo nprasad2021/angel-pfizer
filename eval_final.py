@@ -8,6 +8,7 @@ import time
 import numpy as np
 import os
 import csv
+import keras
 
 IMG_HEIGHT = 224
 IMG_WIDTH = 224
@@ -30,7 +31,7 @@ def MadMaxPool(team_name='madmaxpool', path_to_data_source='/om/user/nprasad/ang
         target_size=(IMG_HEIGHT, IMG_WIDTH),
         batch_size=BATCH_SIZE
         )
-    
+
     keras.backend.set_learning_phase(0)
 
     idx = 0

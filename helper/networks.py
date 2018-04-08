@@ -210,7 +210,7 @@ def ensemble(nets, input_shape, num_frozen):
 
         md_flat.append(model_tmp)
 
-    mer_model = Sequential()
+    
     mer_model.add(Concatenate()(md_flat))
 
     mer_model.add(Dense(256))
