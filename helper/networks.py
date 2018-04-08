@@ -162,7 +162,7 @@ def jaron(input_shape=(224,224,3), freeze=0):
 
     return model
 
-def vgg_by_hand(input_shape=(224,224,3), freeze=0)
+def vgg_by_hand(input_shape=(224,224,3), freeze=0):
     model = Sequential([
         Conv2D(64, (3, 3), input_shape=input_shape, padding='same',
                activation='relu'),
